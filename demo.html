@@ -1,0 +1,154 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+		<script language="javascript" src="jquery-1.4.2.min.js"></script>
+		<script language="javascript" src="jquery.hspvalid.js"></script>
+		<style type="text/css">
+			div{ width: 49%; float: left; }
+		</style>
+		<script language="javascript">
+			
+			// Validate form method, return false or true.
+			function sub() {
+				var result = $("form").validateForm();
+				if(result) {
+					alert("Validate pass-验证通过");
+				}
+			}
+			
+			// Validate phone number, return false or true.
+			var validPhoneNum = function() {
+				var sp = document.form0.mobile_sp.value;
+				var phoneNum = document.form0.cellphone_number.value;
+				if(phoneNum != null && phoneNum != '') {
+					var reg;
+					var spDesc;
+					if(sp == "0") {
+						// 移动
+						reg = /^13[0-9]{9}$/;
+						spDesc = "移动";
+					} else if(sp == "1") {
+						// 联通
+						reg = /^14[0-9]{9}$/;
+						spDesc = "联通";
+					} else if(sp == "2") {
+						// 电信
+						reg = /^15[0-9]{9}$/;
+						spDesc = "电信";
+					} else {
+						alert("请先选择运营商！");
+						return false;
+					}
+					
+					if(!reg.test(phoneNum)) {
+						alert("号码必须是" + spDesc + "号码。");
+						return false;
+					}
+					return true;
+					
+				}
+				
+				return true;
+				
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div>
+		<font size="22">Demo</font><br />
+		<pre><strong>表单验证规则如下：</strong>
+1.姓名、生日、工龄、手机运营商不能为空；
+2.姓名格式必须为纯中文；
+3.生日格式必须为yyyy-MM-dd格式；
+4.英文名格式必须为纯英文字母；
+5.英文名字符长度范围限制为0-20；
+6.工龄格式必须为整形数字；
+7.工龄的数值范围限制为0-50；
+8.当输入手机号码时，根据选择的手机运营商有如下几种情况：
+  8.1 选择“移动”，手机号码必须是以“13”开头的11位数字；
+  8.2 选择“联通”，手机号码必须是以“14”开头的11位数字；
+  8.3 选择“电信”，手机号码必须是以“15”开头的11位数字；
+
+声明：此Demo只做部分演示，具体用法请参照README		
+		</pre>
+		</div>
+		<div>
+		<form name="form0" action="#" onsubmit="return valid(this)" >
+		<table>
+			<caption>个人档案</caption>
+			<tr>
+				<td>姓名</td>
+				<td>
+					<input type="input" required="true" rule="chs" name="name" value="" />
+				</td>
+			</tr>
+			<tr>
+				<td>生日</td>
+				<td>
+					<input type="input" required="true" myrule="{regex:/^\d{4}-\d{2}-\d{2}$/, desc:'yyyy-MM-dd' }" name="birthday" value="" />
+				</td>
+			</tr>
+			
+			<!--
+			<tr>
+				<td>性别</td>
+				<td>
+					<input type="radio" name="sex" value="m" />male<br/>
+					<input type="radio" name="sex" value="f" />female
+				</td>
+			</tr>
+			-->
+
+			<tr>
+				<td>英文名</td>
+				<td>
+					<input type="input" rule="eng" length="[0, 20]" name="english_name" value="" />
+				</td>
+			</tr>
+			<tr>
+				<td>工龄</td>
+				<td>
+					<input type="input" name="workYear" required="true" rule="integer" valuerange="0, 50" value="" />
+				</td>
+			</tr>
+			
+			<!--
+			<tr>
+				<td>爱好</td>
+				<td>
+					<input type="checkbox" name="hobby" value="basketball" />篮球<br/>
+					<input type="checkbox" name="hobby" value="music" />音乐<br/>
+					<input type="checkbox" name="hobby" value="football" />足球<br/>
+				</td>
+			</tr>
+			-->
+
+			<tr>
+				<td>手机运营商</td>
+				<td>
+					<select name="mobile_sp" required="true" >
+						<option value="">-- 请选择 --</option>
+						<option value="0">移动</option>
+						<option value="1">联通</option>
+						<option value="2">电信</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>手机号码</td>
+				<td>
+					<input type="input" name="cellphone_number" vmethod="validPhoneNum()" value="" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="button" value="SUBMIT" onclick="sub()" />
+				</td>
+			</tr>
+			
+		</table>
+		</form>
+		</div>
+	</body>
+</html>

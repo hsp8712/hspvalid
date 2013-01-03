@@ -1,0 +1,19 @@
+ jQuery hspvalid v1.0
+ @author shipley
+ How to use:
+ 	1、运用在input、textarea 或 select 等 表单元素上；
+ 	2、7个属性（required, rule, myrule, length, valuerange, title, vmethod）；
+ 	3、用法：
+		通过在html表单元素上添加2中的属性，实现表单验证限制，
+		a、非空验证，required='true' 验证不能为空；
+		b、正则验证，rule=regName, ruleName值取下面option变量下的vDefReg下面的key，比如： number（数字）\eng（英文字母）\chs（汉字）..., 可以动态的添加新的验证规则;
+		c、自定义正则验证，myrule="{regex: 正则, desc:格式描述 }"，实现验证的定制，优先级高于rule属性；
+		d、长度验证，length='byte[num1, num2]' （字节长度范围为num1到num2包括边界），length='[num1,num2]'（字符长度范围为num1到num2包括边界）
+		e、数值范围验证，valuerange="num1, num2", 依赖rule="numeric"（数值）或rule="integer"（整数数值），限制数值的最大值和最小值（包括边界） 如： valuerange="10, 100" 代表10 <=value<=100
+		f、特殊逻辑验证，vmethod="function()", function为一js代码的字符串表示返回布尔值，其中实现某种商业逻辑； 
+		g、表单项名称，title='title'（提示信息以title值为表单项的名称，如果title属性不存在，或为空：
+			如：<td>项目1</td><td><input ></td> 则取'项目1'为表单项名称，其中提示信息以'表单项名称'开头；
+ 	
+	var isPass = $("#formId").validateForm(); 返回boolean值代表是否验证通过；			
+	var isInputPass = $("#inputId").validateInput(); 返回boolean值代表某一表单验证是否通过；  
+ 
