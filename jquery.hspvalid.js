@@ -109,7 +109,12 @@
 			/** 判断select为空的规则 */
 			vSelectEmptyRule: 1,	// 0:没有选择选项时为空， 1：选择的选项value为空
 			
-			vOneChsByteLength: 2	// 一个中文的字节长度
+			vOneChsByteLength: 2,	// 一个中文的字节长度
+			
+			isValidAll: false,  // 是否一次验证所有
+			
+			/** $formElement: form element jquery;  msg: message */
+			failedCallBack: function($formElement, msg){}
 			
 		};
 		
@@ -141,6 +146,7 @@
 				if(optionChildType == 'object') {
 					updateOpt(optionChild, optChild);
 				} else {
+					option[key] = optChild;
 					continue;
 				}
 			}
@@ -180,7 +186,7 @@
 				if($input.val()==null || $.trim($input.val())=='')
 				{
 					$input.focus();
-					alert(title+"不能为空！");
+					option.failedCallBack($input, title+"不能为空！");
 					return true;
 				}
 				return false;
@@ -193,7 +199,7 @@
 				if( selected$Objs.length <= 0 )	
 				{
 					$input.focus();
-					alert("请选择" + title);
+					option.failedCallBack($input, "请选择" + title);
 					return true;
 				}
 				
@@ -204,7 +210,7 @@
 					if(val==null || $.trim(val)=='')
 					{
 						$input.focus();
-						alert("请选择" + title);
+						option.failedCallBack($input, "请选择" + title);
 						return true;
 					}
 				}
@@ -271,7 +277,7 @@
 					else
 					{
 						$input.focus();
-						alert(errMsg);
+						option.failedCallBack($input, errMsg);
 						return false;
 					}
 				}
@@ -371,14 +377,14 @@
 							if( minVal == maxVal && $tsValue != minVal ) // 当minVal 等于 maxVal 
 							{
 								var title=getTitle($input) + "数值应为" + minVal + ", 请您重新输入！";
-								alert(title);
+								option.failedCallBack($input, title);
 								$input.focus();
 								regTrue=false;
 							} 
 							else if( $tsValue < minVal || $tsValue > maxVal )
 							{
 								var title=getTitle($input) + "数值范围应为" + minVal + "-" + maxVal + ", 请您重新输入！";
-								alert(title);
+								option.failedCallBack($input, title);
 								$input.focus();
 								regTrue=false;
 							}
@@ -514,7 +520,7 @@
 					if(!isLenTrue)
 					{
 						$input.focus();
-						alert(msg);
+						option.failedCallBack($input, msg);
 						return false;
 					}
 					
@@ -550,7 +556,7 @@
 					}
 					
 					$input.focus();
-					alert(msg);
+					option.failedCallBack($input, msg);
 					return false;
 				}
 			}
@@ -609,11 +615,14 @@
 			
 				flag = $(this).validateInput();
 				
-				// 验证失败，则结束循环
-				if(!flag)
-				{
-					return false;
+				if(!option.isValidAll) {
+					// 验证失败，则结束循环
+					if(!flag)
+					{
+						return false;
+					}
 				}
+				
 			});
 						
 			if(!flag)
